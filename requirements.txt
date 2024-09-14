@@ -1,0 +1,9 @@
+opencv-python
+dlib
+face-recognition
+numpy
+ffmpeg-python
+colorama
+moviepy
+pydub
+pyannote.audio
