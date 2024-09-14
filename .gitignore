@@ -1,4 +1,4 @@
 *.mp4
 *.wav
-__pychache__/
+__pycache__/
 src/shape_predictor_68_face_landmarks.dat
