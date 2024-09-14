@@ -108,11 +108,11 @@ def main(video_input, annotated_dir, face_dir, eyes_dir, frame_skip=3, audio=Tru
             else:
                 print(f"File {file} does not exist.")
 
-        # ffmpeg -i src/input_short.mp4 -i final/out.mp4 -i final/black_out.mp4 -i final/eyes_out.mp4 -filter_complex "[0:v]fps=30[v0];[1:v]fps=30[v1];[2:v]fps=30[v2];[3:v]fps=30[v3];[v0][v1]hstack=inputs=2[top];[v2][v3]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2" -vsync vfr -c:v libx264 -crf 23 -preset veryfast final/output.mp4
+        # ffmpeg -i src/input_long.mp4 -i final/black_out.mp4 -i final/out.mp4 -i final/eyes_out.mp4 -filter_complex "[0:v]fps=30[v0];[1:v]fps=30[v1];[2:v]fps=30[v2];[3:v]fps=30[v3];[v0][v1]hstack=inputs=2[top];[v2][v3]hstack=inputs=2[bottom];[top][bottom]vstack=inputs=2" -vsync vfr -c:v libx264 -crf 23 -preset veryfast final/output.mp4
 
 
 
-        #     os.remove("final/"+annotated_dir)
+        #     os.remove("final/"+annotated_dir) 
         #     os.remove("final/"+face_dir)
         #     os.remove("final/"+eyes_dir)
 
@@ -121,8 +121,8 @@ def main(video_input, annotated_dir, face_dir, eyes_dir, frame_skip=3, audio=Tru
         # os.remove(eyes_dir)
 
 if __name__ == "__main__":
-    video_input = "src/input_long.mp4"
-    annotated_dir = "out.mp4"
-    face_dir = "black_out.mp4"
-    eyes_dir = "eyes_out.mp4"
+    video_input = "src/jan6.mp4"
+    annotated_dir = "jan6.mp4"
+    face_dir = "jan6_black_out.mp4"
+    eyes_dir = "jan6_eyes_out.mp4"
     main(video_input, annotated_dir, face_dir, eyes_dir)

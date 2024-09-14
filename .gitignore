@@ -3,3 +3,4 @@
 __pycache__/
 audio/
 src/shape_predictor_68_face_landmarks.dat
+test.py
