@@ -53,7 +53,8 @@ def split_video_by_timestamps(video_path, csv_path, output_dir):
         video.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
 
         # Create a VideoWriter object for the output video
-        output_file = os.path.join(output_dir, f'{speaker}_segment_0{index}.mp4')
+        # output_file = os.path.join(output_dir, f'{speaker}_segment_0{index}.mp4')
+        output_file = os.path.join(output_dir,f'0{index}.mp4')
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
 
@@ -72,7 +73,17 @@ def split_video_by_timestamps(video_path, csv_path, output_dir):
     video.release()
 
 if __name__ == "__main__":
+    # video_path = "src/jan6.mp4"
+    # csv_path = "src/jan6.csv"  # Ensure the path to your CSV file is correct
+    # output_dir = "output_segments"
+    # split_video_by_timestamps(video_path, csv_path, output_dir)
+
     video_path = "final/jan6_black_out.mp4"
     csv_path = "src/jan6.csv"  # Ensure the path to your CSV file is correct
-    output_dir = "output_segments"
+    output_dir = "output_segments1"
     split_video_by_timestamps(video_path, csv_path, output_dir)
+
+    # video_path = "final/jan6_eyes_out.mp4"
+    # csv_path = "src/jan6.csv"  # Ensure the path to your CSV file is correct
+    # output_dir = "output_segments2"
+    # split_video_by_timestamps(video_path, csv_path, output_dir)
