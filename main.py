@@ -69,8 +69,9 @@ def ask_question(question, data_structure):
 
     return completion.choices[0].message.content
 
-def create_data_structure_from_csv(csv_path):
+def create_data_structure_from_csv(csv_path, face_eyes_ear_path, frame_interval=30):
     df = pd.read_csv(csv_path, delimiter=',', header=None, names=['start_time', 'end_time', 'content', 'Speaker'])
+    df_ear = pd.read_csv(face_eyes_ear_path, delimiter=',', header=0, names=['Frame', 'Left EAR', 'Right EAR'])
     # print(df.head())
 
     # Initialize the list of dictionaries
@@ -80,17 +81,29 @@ def create_data_structure_from_csv(csv_path):
     for index, row in df.iterrows():
         # print(index, row)
         # break
+        # video_path = f"output_segments1/0{index}.mp4" 
+        # base64Frames = video_to_base64_array(video_path)
+
+        # if(idx==0): cv2.imwrite('test.jpg', base64_to_image(base64Frames[0]))
+
+        segment_ear_data = df_ear[df_ear['Frame'].between(index * frame_interval, (index + 1) * frame_interval - 1)]
+        avg_left_ear = segment_ear_data['Left EAR'].mean()  # Average EAR for the left eye
+        avg_right_ear = segment_ear_data['Right EAR'].mean()
+
         entry = {
             'content': row['content'],
-            'speaker': row['Speaker']
+            'speaker': row['Speaker'],
+            'left_ear': avg_left_ear,
+            'right_ear': avg_right_ear,
+            # 'image': base64Frames
         }
         data_structure.append(entry)
-    
+    # print(base64Frames[0].shape)
     return data_structure
 
 def get_video_file():
     """Prompt the user to input the video file path."""
-    video_path = input(f"{Fore.CYAN}Enter the path to your video file: {Fore.RESET}")
+    video_path = input(f"{Fore.CYAN}Enter the path to your video file: {Fore.RESET}").strip()
     if not os.path.exists(video_path):
         cyberpunk_print(f"Error: File not found! Please check the path and try again.", Fore.RED)
         sys.exit(1)
@@ -100,7 +113,7 @@ def get_video_file():
         diarize(video_path)
         transcript_path = "transcript.srt"
     else:
-        transcript_path = input(f"{Fore.GREEN}Enter transcript path: {Fore.RESET}")
+        transcript_path = input(f"{Fore.GREEN}Enter transcript path: {Fore.RESET}").strip()
         if not os.path.exists(transcript_path):
             cyberpunk_print(f"Error: File not found! Please check the path and try again.", Fore.RED)
             sys.exit(1)
@@ -126,12 +139,17 @@ def process_video(video_path, transcript_path):
         #     {"timestamp": "00:08:15", "info": "Rebuttal section"}
         # ]
 
-        ds = create_data_structure_from_csv(transcript_path)
-        console.print(Markdown(ask_question("Note any interesting observations on tone of each participant and the moderator", ds)))
+        ds = create_data_structure_from_csv(transcript_path, "face_eyes_ear.csv")
+        # console.print(Markdown(ask_question("Note any interesting observations on tone of trump, harris, and the moderator", ds)))
+        print(f"{Fore.CYAN}-"*192)
+        # console.print(Markdown(ask_question("compare the EAR values between harris, trump, and moderator. what insights do you find? be quantitative", ds)))
+        print(f"{Fore.CYAN}-"*192)
+        # Spectral Analysis
+        print(f"{Fore.CYAN}-"*192)
 
         while True:
             cyberpunk_print("Now, you ask a question: ", Fore.YELLOW)
-            response = ask_question(input(f"{Fore.CYAN}-->"), ds)
+            response = ask_question(input(f"{Fore.CYAN}-->{Fore.RESET}"), ds)
             console.print(Markdown(response))
 
         cyberpunk_print(f"Processing complete!", Fore.GREEN)
