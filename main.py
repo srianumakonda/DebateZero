@@ -55,7 +55,7 @@ def ask_question(question, data_structure):
     for entry in data_structure:
         prompt += f"[{entry['speaker']}: {entry['content']}\n"
     prompt += f"\nQuestion: {question}"
-    client = OpenAI(api_key = 'sk-3GLJ_C5EMvAHL1nfEzoybWVhNUaycNEyHrHMDfqJKhT3BlbkFJksK40un-Oshf1SyF1JXEDh_Z47_ExQ7NoXqoPzewsA')
+    client = OpenAI(api_key = 'INSERT_API_KEY')
     completion = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[
